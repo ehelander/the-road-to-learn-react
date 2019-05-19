@@ -34,3 +34,22 @@
 - 6
   - [npm Documentation](https://docs.npmjs.com/)
   - [Yarn Documentation](https://yarnpkg.com/en/docs/)
+## Installation
+- 7
+  - The bundled React library is just a *react.js* file.
+  - Two libraries are needed for working with a CDN: `react` and `react-dom`.
+  - [Getting Started](https://reactjs.org/docs/getting-started.html)
+    - [React Blog](https://reactjs.org/blog/)
+## Zero-Configratiion Setup
+- 8
+  - `npm install -g create-react-app`
+    - `create-react-app --version`
+    - Note that `create-react-app` 2.1 has TypeScript built-in: `create-react-app <app-name> --typescript`
+      - [Setup TypeScript in React app](https://blog.bitsrc.io/why-and-how-use-typescript-in-your-react-app-60e8987be8de)
+  - `create-react-app hackernews`
+- 10
+  - Run the application at http://localhost:3000  
+    - `npm start`
+  - `npm test`
+  - `npm run build`
+  - [create-react-app](https://github.com/facebook/create-react-app)
