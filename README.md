@@ -130,3 +130,13 @@
     - Since `map()` is only an Array method, an error will be thrown if you end up calling `map()` on a null or Object value.
       - To avoid calling `map()` on a null value, consider using `(originalArray || []).map()`.
     - To log a value in a single-line `map()`, add `console.log(value) || <operations>`, since `console.log()` returns `undefined`.
+
+## ES6 Arrow Functions
+
+- 23
+  - An arrow function's parentheses are unnecessary when dealing with only a single argument.
+- 24
+  - In a concise body, an implicit return is attached.
+- Exercises
+  - [Arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+    - An arrow function does not provide its own bindings to `this`, `arguments`, `super`, or `new.target`.
