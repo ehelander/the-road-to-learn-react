@@ -83,4 +83,7 @@
 
 ## ES6 const and let
 
--
+- Exercises
+  - [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
+  - [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)
+    - "At the top level of programs and functions, let, unlike var, does not create a property on the global object."
