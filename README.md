@@ -105,3 +105,28 @@
     - Prevents page refresh while developing - can maintain application state.
 - Exercises
   - [Dan Abramov - Live React: Hot Reloading with Time Travel at react-europe 2015](https://www.youtube.com/watch?v=xsSnOQynTHs)
+
+## Complex JavaScript in JSX
+
+- 21
+  - Assign a key to each list element so React can identify modified items when the list changes.
+    - Use a stable identifier, not the index (which would not be stable if the list changes its order).
+- Exercises
+  - [List and Keys](https://reactjs.org/docs/lists-and-keys.html)
+    - If no explicit key is assigned, React will default to using indexes as keys.
+    - Rule of thumb: Use a `key` inside a `map()`.
+    - `props.key` does not get passed to the component.
+  - [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
+  - [Deep Dive into JavaScript's Array Map Method](https://www.robinwieruch.de/javascript-map-array/)
+    - `map()` takes 3 arguments: value, index, array
+    - Use `forEach()` when we don't need to do anything with the return values of its callback function; use `map()` otherwise.
+    - With `reduce()`, whatever you return from the callback function will be used as the accumulator argument in the callback for the next iteration.
+      - Since `reduce()` can work with any data structure, we could use `reduce()` to do the exact same thing as `map()`.
+    - `reverse()` mutates the original array.
+      - If this is not desired, use `map()` first (if transforming the values) or `slice()` (if no transformation necessary).
+    - `Object.entries()` (ES2017) retuns a two-dimensional array of an object's keys and values.
+    - If you want to transform data and create a new object, use `reduce()`.
+    - Use `flatMap()` (ES2019) to flatten a multidimensional array into a single-dimensional array of transformed values. (`reduce()` can be used for the same purpose)
+    - Since `map()` is only an Array method, an error will be thrown if you end up calling `map()` on a null or Object value.
+      - To avoid calling `map()` on a null value, consider using `(originalArray || []).map()`.
+    - To log a value in a single-line `map()`, add `console.log(value) || <operations>`, since `console.log()` returns `undefined`.
