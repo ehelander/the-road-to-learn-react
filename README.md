@@ -140,3 +140,13 @@
 - Exercises
   - [Arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
     - An arrow function does not provide its own bindings to `this`, `arguments`, `super`, or `new.target`.
+
+## ES6 Classes
+
+- 26
+  - The `render()` method of a class component must be overridden (because it defines the output of a React `Component`).
+- Exercises
+  - [JavaScript fundamentals before learning React](https://www.robinwieruch.de/javascript-fundamentals-react-requirements/)
+    - Returning `null` is a valid way to display nothing in a component.
+    - When something is exported as the `default`, no curly braces are needed when importing it.
+  - [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
