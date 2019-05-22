@@ -87,3 +87,21 @@
   - [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
   - [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)
     - "At the top level of programs and functions, let, unlike var, does not create a property on the global object."
+
+## ReactDOM
+
+- 14
+  - `ReactDOM.render()` uses a DOM node in your HTML to replace it with JSX. It's a way to integrate React in any foreign application easily, adn you can use `ReactDOM.render()` mltiple times across your application.
+    - 2 arguments:
+      - first argument is for rendering the JSX
+      - second argument si the place where the React app hooks into your HTML
+- Exercises
+  - [Rendering Elements](https://reactjs.org/docs/rendering-elements.html)
+
+## Hot Module Replacement
+
+- 17
+  - Enable Hot Module Replacement (HMR) in _src/index.js_: `if (module.hot) {module.hot.accept(); }`
+    - Prevents page refresh while developing - can maintain application state.
+- Exercises
+  - [Dan Abramov - Live React: Hot Reloading with Time Travel at react-europe 2015](https://www.youtube.com/watch?v=xsSnOQynTHs)
