@@ -150,3 +150,5 @@
     - Returning `null` is a valid way to display nothing in a component.
     - When something is exported as the `default`, no curly braces are needed when importing it.
   - [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
+
+# Basics in React
