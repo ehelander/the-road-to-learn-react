@@ -50,7 +50,7 @@
   - [Getting Started](https://reactjs.org/docs/getting-started.html)
     - [React Blog](https://reactjs.org/blog/)
 
-## Zero-Configratiion Setup
+## Zero-Configration Setup
 
 - 8
   - `npm install -g create-react-app`
