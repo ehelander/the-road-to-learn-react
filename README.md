@@ -80,3 +80,7 @@
     - When splitting JSX across multiple lines, consider wrapping it in parentheses to avoid automatic semicolon insertion.
     - "By default, React DOM escapes any values embedded in JSX before rendering them. Thus it ensures that you can never inject anything that’s not explicitly written in your application. Everything is converted to a string before being rendered. This helps prevent XSS (cross-site-scripting) attacks."
   - [React Components, Elements, and Instances](https://reactjs.org/blog/2015/12/18/react-components-elements-and-instances.html)
+
+## ES6 const and let
+
+-
