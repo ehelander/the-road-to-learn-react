@@ -163,3 +163,25 @@
   - Do not mutate the state directly. Use `setState()`.
 - Exercises
   - [Constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Constructor)
+
+## ES6 Object Initializer
+
+- 32
+  - Shorthand in ES6 to initialize objects.
+    - Instead of...
+    ```
+    const user = {
+      name: name,
+    }
+    ```
+    - ...we can (if the property name in the object matches the variable name)...
+    ```
+    const user = {
+      name,
+    }
+    ```
+- 33
+  - ES6 allows computed property names.
+- Exercises
+  - [Object initializer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer)
+    - Duplicate property names are allowed; the second will overwrite the first.
