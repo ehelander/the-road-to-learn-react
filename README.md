@@ -152,3 +152,14 @@
   - [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
 
 # Basics in React
+
+## Local Component State
+
+- 29
+  - Calling `super(props)` in a class component constructor is mandatory. It sets `this.props` in the constructor.
+- 30
+  - Every time the local component stat is changed, `render()` runs again.
+- 31
+  - Do not mutate the state directly. Use `setState()`.
+- Exercises
+  - [Constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Constructor)
