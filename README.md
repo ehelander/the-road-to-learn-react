@@ -185,3 +185,37 @@
 - Exercises
   - [Object initializer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer)
     - Duplicate property names are allowed; the second will overwrite the first.
+
+## Unidirectional Data Flow
+
+- 35
+  - Binding a function in a constructor: `this.onDismiss = this.onDismiss.bind(this);`
+- 38
+  - Unidirectional data flow of React:
+    - An action is triggered in the view layer
+    - A function or class method modifies the local component state
+    - The `render()` method of the component runs and updates the view.
+- Exercises
+  - [State and Lifecycle](https://reactjs.org/docs/state-and-lifecycle.html)
+    - 5 steps to convert a function component to a class:
+      - 1: Create an ES6 class with the same name, extending `React.Component`
+      - 2: Add a single empty `render()` method.
+      - 3: Move the body of the function inside `render()`.
+      - 4: Replace `props` with `this.props` in the `render()` body.
+      - 5: Delete the remaining empty function declaration.
+    - 3 steps to move `date` from props to a state:
+      - 1: Replace `this.props.date` with `this.state.data` in `render()`.
+      - 2: Add a class constructor that sets the initial `this.state`.
+      - 3: Remove the `date` prop.
+    - Mounting: When a component is rendered to the DOM for the first time.
+      - `componentDidMount()`
+    - Unmounting: When a component is removed from the DOM.
+      - `componentWillUnmount()`
+    - 3 things to know about `setState()`:
+      - 1: Do not modify the state directly
+      - 2: State updates may be asynchronous
+        - React may batch multiple calls into a single update.
+        - Consider using a second form of `setState()` that accepts a function. The function receives the previous state as its first argument and the props at the time of update as the second argument.
+      - 3: State updates are (shallowly) merged
+      - The data flows down
+        - Neither the parent nor the child should know or care whether a certain component is stateful or stateless or is defined as a function or a class.
