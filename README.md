@@ -266,3 +266,32 @@
 - 48
   - Using arrow functions in event handlers impacts performance. Every time `render()` runs, the handler instantiates the higher-order arrow function.
     - If this is a concern (in data-intense applications), consider implementing a dedicated component to bind the method in the constructor. For most applications, this is premature optimization.
+
+## Interactions with Forms and Events
+
+- 49
+  - We use synthetic events to access values in an event payload.
+- 50
+  - When using a handler in your element, you get access to the synthetic React event in your callback function's signature (e.g., `onSearchChange(event)`).
+- 52
+  - `this.setState()` is a shallow merge, preserving the sibling properties.
+- 53
+  - Higher-order function: Passing a value into a function which then returns a new function
+- Exercises
+  - [Handling Events](https://reactjs.org/docs/handling-events.html)
+    - Differences betweeen events from React elements and events from DOM elements:
+      - React events are named using camelCase (instead of lowercase)
+      - For JSX, pass a function as the event handler (instead of a string)
+      - You cannot return `false` to prevent default behavior.
+        - `preventDefault` must be called explicitly.
+      - You should not need to call `addEventListener` - should just be able to provide a listner when the element is initially rendered.
+    - Generally, if you refer to a method without `()` (e.g., `onClick={this.handleClick})`), you should bind that method.
+    - Two ways to get around binding:
+      - 1: Use the (experimental, but enabled by default with Create React App) public class fields syntax.
+      - 2: Use an arrow function in the callback.
+        - Though this creates a different callback each time. This may cause extra re-rendering for lower components. As a result, prefer either binding methods in the constructor or using the class fields syntax.
+  - [Higher-order function](https://en.wikipedia.org/wiki/Higher-order_function)
+    - A higher-order function (known, in mathematics, as an _operator_ or a _functional_) does at least one of the following:
+      - 1: Takes a function as an argument
+      - 2: Returns a function
+    - All other fuctions are first-order functions.
