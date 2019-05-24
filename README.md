@@ -351,3 +351,21 @@
       ```
 
     -
+
+## Controlled Components
+
+- 59
+  - Form elements (`<input>`, `<textarea>`, `<select>`) hold their own state in plan HTML.
+    - These are considered uncontrolled components, because they handle their own state.
+    - In React, we only want controlled components.
+      - To achieve this, we set the `value` attribute of the field.
+- Exercises
+  - [Forms](https://reactjs.org/docs/forms.html)
+    - Controlled component: A element whose value is controlled by React (via `setState()`).
+    - With a controlled component, every stat mutation will have an associated handler function.
+    - In HTML, a `<textarea>` element is defined by its children; in React, it uses a `value` attribute.
+    - Instead of adding a `selected` attribute on an `<option>` child of a `<select>` element, React uses a `value` attribute on the `<select>` element itself.
+    - A file input tag (`<input type="file" />`) is an uncontrolled component, since it's read-only.
+    - [Formik](https://jaredpalmer.com/formik) offers a complete form solution, including validation, tracking visited fields, and handling submission.
+      - It's built on the same principles as controlled components.
+  - [react-controlled-components-examples](https://github.com/the-road-to-learn-react/react-controlled-components-examples)
