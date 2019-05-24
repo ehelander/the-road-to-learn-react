@@ -78,7 +78,7 @@
 - Exercises
   - [Introductin JSX](https://reactjs.org/docs/introducing-jsx.html)
     - When splitting JSX across multiple lines, consider wrapping it in parentheses to avoid automatic semicolon insertion.
-    - "By default, React DOM escapes any values embedded in JSX before rendering them. Thus it ensures that you can never inject anything that’s not explicitly written in your application. Everything is converted to a string before being rendered. This helps prevent XSS (cross-site-scripting) attacks."
+    - By default, React DOM escapes any values embedded in JSX before rendering them. Thus it ensures that you can never inject anything that’s not explicitly written in your application. Everything is converted to a string before being rendered. This helps prevent XSS (cross-site-scripting) attacks.
   - [React Components, Elements, and Instances](https://reactjs.org/blog/2015/12/18/react-components-elements-and-instances.html)
 
 ## ES6 const and let
@@ -258,3 +258,11 @@
 - Exercises
   - [react-alternative-class-component-syntax](https://github.com/the-road-to-learn-react/react-alternative-class-component-syntax)
     - Class field declarations: can initialize local state without using the constructor, and declare class methods by arrow functions without also needing to bind them.
+
+## Event Handler
+
+- 44
+  - A function must be passed to an event handler. (I.e., the expression needs to return a function, not just be a function.)
+- 48
+  - Using arrow functions in event handlers impacts performance. Every time `render()` runs, the handler instantiates the higher-order arrow function.
+    - If this is a concern (in data-intense applications), consider implementing a dedicated component to bind the method in the constructor. For most applications, this is premature optimization.
