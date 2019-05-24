@@ -219,3 +219,42 @@
       - 3: State updates are (shallowly) merged
       - The data flows down
         - Neither the parent nor the child should know or care whether a certain component is stateful or stateless or is defined as a function or a class.
+
+## Bindings
+
+- 39
+  - Class methods don't automatically bind `this` to the class instance.
+- 41
+  - Don't bind class methods inside `render()`; it will bind every time the component updates and hurt performance.
+  - Don't define functions inside the constructor; the constructor should just be used for instantiating the class and its properties, not for business logic.
+- 42
+
+  - Class methods can be autobound with ES6 arrow functions.
+
+    - E.g.,
+
+    ```
+    onClickMe = () => {
+      console.log(this);
+    }
+    ```
+
+    - vs.
+
+    ```
+    constructor() {
+      super();
+
+      this.onClickMe = this.onClickMe.bind(this);
+    }
+
+    onClickMe() {
+      console.log(this);
+    }
+    ```
+
+  - Though note that the official React documentation uses the class method bindings in the constructor.
+
+- Exercises
+  - [react-alternative-class-component-syntax](https://github.com/the-road-to-learn-react/react-alternative-class-component-syntax)
+    - Class field declarations: can initialize local state without using the constructor, and declare class methods by arrow functions without also needing to bind them.
