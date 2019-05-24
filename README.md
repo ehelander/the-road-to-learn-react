@@ -295,3 +295,59 @@
       - 1: Takes a function as an argument
       - 2: Returns a function
     - All other fuctions are first-order functions.
+
+## ES6 Destructuring
+
+- Exercises
+
+  - [Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+
+    - Handy for swapping variables: `[a, b] = [b, a]`
+    - When using object literal destructuring assignment without a declaration, parentheses are required:
+      ```
+      var a, b;
+      ({a, b} = {a: 1, b: 2});
+      ```
+      - vs. `{a, b} = {a: 1, b: 2}`
+        - `{a, b}` is evaluated as a block and not an object literal.
+    - Destructuring can be used to unpack a property from an object and assign it to a variable with a different name.
+
+      ```
+      var o = {p: 42, q: true};
+      var {p: foo, q: bar} = o;
+
+      console.log(foo); // 42
+      console.log(bar); // true
+      ```
+
+    - Nested object and array destructuring:
+
+      ```
+      const metadata = {
+        title: 'Scratchpad',
+        translations: [
+          {
+            locale: 'de',
+            localization_tags: [],
+            last_edit: '2014-04-14T08:43:37',
+            url: '/de/docs/Tools/Scratchpad',
+            title: 'JavaScript-Umgebung'
+          }
+        ],
+        url: '/en-US/docs/Tools/Scratchpad'
+      };
+
+      let {
+        title: englishTitle, // rename
+        translations: [
+          {
+            title: localeTitle, // rename
+          },
+        ],
+      } = metadata;
+
+      console.log(englishTitle); // "Scratchpad"
+      console.log(localeTitle);  // "JavaScript-Umgebung"
+      ```
+
+    -
