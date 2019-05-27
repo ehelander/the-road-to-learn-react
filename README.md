@@ -369,3 +369,5 @@
     - [Formik](https://jaredpalmer.com/formik) offers a complete form solution, including validation, tracking visited fields, and handling submission.
       - It's built on the same principles as controlled components.
   - [react-controlled-components-examples](https://github.com/the-road-to-learn-react/react-controlled-components-examples)
+
+## Split Up Components
