@@ -371,3 +371,33 @@
   - [react-controlled-components-examples](https://github.com/the-road-to-learn-react/react-controlled-components-examples)
 
 ## Split Up Components
+
+- 63
+  - The `props` (short for `properties`) object is accessible via the class instance by using `this`. It has all the values passed to the components. This enables components to pass properties down the component tree.
+
+## Composable Components
+
+- 64
+  - The `children` prop is used to pass elements (unknown to the component itself) to components from above.
+    - This makes it possible to compose components together.
+    - Strings, elements, and entire element trees can be passed.
+- Exercises
+  - [Composition vs Inheritance](https://reactjs.org/docs/composition-vs-inheritance.html)
+    - Recommendation: Use composition, rather than inheritance, to reuse code between components.
+    - Expecially for components that do not know their children ahead of time, use the `children` prop to pass the children elements directly into their output.
+      - If you have multiple 'holes' in your application, consider using additional descriptive props (beyond `children`).
+    - Another case for composition: When a more 'specific' component renders a more 'generic' one, configuring it with props.
+    - Facebook has not found any cases where they would recommend using inheritance instead of composition.
+      - If you want to reuse non-UI functionality, consider extracting it into a JavaScript module (so it can be imported without being extended).
+  - [React Component Composition](https://www.robinwieruch.de/react-component-composition/)
+    - Composition: The arrangement of ingredients to create something bigger.
+    - Everything you do within a function is composition of ingredients and their arrangement. When a function is made up of functions, then it's the composition of functions.
+    - Note: [React Testing Tutorial: Test Frameworks & Components Tests](https://www.robinwieruch.de/react-testing-tutorial/)
+    - Use the [slot pattern](https://www.robinwieruch.de/react-pass-props-to-component/) when you have more than one child that you want to compose into another component (so the component doesn't have to know ahead of time what will be passed in).
+    - React Router - used to compose dynamic components (depending on the selected route) into the Route components.
+      - The App component displays a static frame of components that are always visible, but changes the inner content depending on the URL.
+      - Advanced patterns for component composition:
+        - [Render Props Components](https://www.robinwieruch.de/react-render-props-pattern/)
+          - An extension of the slot pattern, where a function returns the thing you want to render (rather than you passing it directly).
+        - [Higher-Order Components](https://www.robinwieruch.de/gentle-introduction-higher-order-components/)
+          - Receive a component as input and then outputs an enhanced version of it.
