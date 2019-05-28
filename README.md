@@ -401,3 +401,35 @@
           - An extension of the slot pattern, where a function returns the thing you want to render (rather than you passing it directly).
         - [Higher-Order Components](https://www.robinwieruch.de/gentle-introduction-higher-order-components/)
           - Receive a component as input and then outputs an enhanced version of it.
+
+## Reusable Components
+
+- 66
+  - Using components instead of even relatively simple elements (such as `Button` vs. `button`) can make a big difference in the long run for isolating the impact of changes: a single source of truth.
+- 67
+  - When a prop is optional, assigning a default value is a more explicit way of indicating such.
+- Exercises
+  - [How to pass props to components in React](https://www.robinwieruch.de/react-pass-props-to-component/)
+    - Props are used to pass data from component to component.
+    - Props are read only.
+    - There is no way to pass props from a child to a parent component.
+      - But you can pass functions from parent to child components. The child can make use of these functions, and the functions may change the state in a parent component (and then the changed state is passed down to the child and the components re-render). -> Lifting the state up
+    - The component receiving data as props just receives props. It doesn't differentiate between props or state (or derived properties).
+      - Everything incoming is props; everything managed by the component itself is state.
+    - Consider using props spreading to spread a whole object with key-value pairs down to a child component.
+    - Note: [React prop-types](https://reactjs.org/docs/typechecking-with-proptypes.html) can be used for type checking (even without using TypeScript).
+    - Render prop components
+      - A render prop is a function passed as a prop (often called `render`, though the name is unimportant). The function receives arguments but also renders JSX.
+    - Prop drilling
+      - When all the in-between components in a hierarchy need to pass the props along, even though they aren't interested in the props.
+      - The slot pattern is one solution.
+        - This enables you to distribute the props at a top level to all slotted components.
+      - [React's Context API](https://www.robinwieruch.de/react-context-api/) is another solution.
+        - Every interested component can consume the props passed by React's Context API.
+    - How to set props to state?
+      - Initial state can simply be derived from props.
+      - For incoming, changing props, use the `getDerivedStateFromProps(props, state)` lifecycle method. Use this selectively; think twice about the implementation logic before using it. See [You Probably Don't Need Derived State](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html)
+    - The `key` itself cannot be passed as a prop (_key is not a prop. Trying to pass it..._); but its value can be passed as an additional prop.
+    - When using [styled components](https://github.com/styled-components/styled-components), the style becomes co-located with the components (and actually becomes a component, itself).
+      - To pass (beyond the default) props to a styled component, you can use string interpretation in the template literal.
+    - For routing, use React Router (an [essential React library](https://www.robinwieruch.de/essential-react-libraries-framework/)); also consider using the `withRouter()` HOC from React Router.
