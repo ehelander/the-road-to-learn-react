@@ -456,3 +456,7 @@
     - This forces `props` as input and JSX as output.
     - Though a block body can be used to make space for doing something else first (and then specifying `return()`).
 - Exercises
+  - [Components and Props](https://reactjs.org/docs/components-and-props.html)
+    - Always start component names with a capital letter; React treats components starting with lowercase letters as DOM tags.
+    - Name props from the component's point of view rather than the context in which it's being used.
+    - All React components must act like pure functions with respect to their props.
