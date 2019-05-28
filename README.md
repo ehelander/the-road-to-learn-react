@@ -433,3 +433,26 @@
     - When using [styled components](https://github.com/styled-components/styled-components), the style becomes co-located with the components (and actually becomes a component, itself).
       - To pass (beyond the default) props to a styled component, you can use string interpretation in the template literal.
     - For routing, use React Router (an [essential React library](https://www.robinwieruch.de/essential-react-libraries-framework/)); also consider using the `withRouter()` HOC from React Router.
+
+## Component Declarations
+
+- 69
+  - Types of components
+    - Functional Stateless Components
+      - Input: props
+      - Output: a component instance in JSX
+      - Stateless: No local state
+      - No `this` object
+      - No lifecycle methods (except for `render()`, which is applied implicitly).
+    - ES6 Class Components
+      - Extend from the React component (and brings in all the lifecycle methods available in the React component API).
+      - Provides access to `this.state` and `this.setState()`.
+    - React.createClass
+      - Used in older versions of React; deprecated.
+  - Rule of thumb: Use functional stateless components by default; if you need local state or component lifecycle methods, refactor it to an ES6 class component.
+- 70
+  - Best practice: Destructure `props` in the function signature (of a functional stateless component)
+  - An implicit `return` is attached in a concise body.
+    - This forces `props` as input and JSX as output.
+    - Though a block body can be used to make space for doing something else first (and then specifying `return()`).
+- Exercises
