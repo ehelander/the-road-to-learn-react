@@ -1,5 +1,3 @@
-# the-road-to-learn-react
-
 # Foreward
 
 ## FAQ
@@ -13,7 +11,7 @@
 ## Hi, my name is React.
 
 - 2
-  - [10 Reasons why I moved from ANgular to React](https://www.robinwieruch.de/reasons-why-i-moved-from-angular-to-react/)
+  - [10 Reasons why I moved from Angular to React](https://www.robinwieruch.de/reasons-why-i-moved-from-angular-to-react/)
 - Exercises
   - [Essential React Libraries in 2019](https://www.robinwieruch.de/essential-react-libraries-framework/)
   - [How to learn React, Angular or Vue in 2019?](https://www.robinwieruch.de/how-to-learn-framework/)
@@ -78,7 +76,7 @@
 - Exercises
   - [Introductin JSX](https://reactjs.org/docs/introducing-jsx.html)
     - When splitting JSX across multiple lines, consider wrapping it in parentheses to avoid automatic semicolon insertion.
-    - "By default, React DOM escapes any values embedded in JSX before rendering them. Thus it ensures that you can never inject anything that’s not explicitly written in your application. Everything is converted to a string before being rendered. This helps prevent XSS (cross-site-scripting) attacks."
+    - By default, React DOM escapes any values embedded in JSX before rendering them. Thus it ensures that you can never inject anything that’s not explicitly written in your application. Everything is converted to a string before being rendered. This helps prevent XSS (cross-site-scripting) attacks.
   - [React Components, Elements, and Instances](https://reactjs.org/blog/2015/12/18/react-components-elements-and-instances.html)
 
 ## ES6 const and let
@@ -150,3 +148,335 @@
     - Returning `null` is a valid way to display nothing in a component.
     - When something is exported as the `default`, no curly braces are needed when importing it.
   - [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
+
+# Basics in React
+
+## Local Component State
+
+- 29
+  - Calling `super(props)` in a class component constructor is mandatory. It sets `this.props` in the constructor.
+- 30
+  - Every time the local component stat is changed, `render()` runs again.
+- 31
+  - Do not mutate the state directly. Use `setState()`.
+- Exercises
+  - [Constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Constructor)
+
+## ES6 Object Initializer
+
+- 32
+  - Shorthand in ES6 to initialize objects.
+    - Instead of...
+    ```
+    const user = {
+      name: name,
+    }
+    ```
+    - ...we can (if the property name in the object matches the variable name)...
+    ```
+    const user = {
+      name,
+    }
+    ```
+- 33
+  - ES6 allows computed property names.
+- Exercises
+  - [Object initializer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer)
+    - Duplicate property names are allowed; the second will overwrite the first.
+
+## Unidirectional Data Flow
+
+- 35
+  - Binding a function in a constructor: `this.onDismiss = this.onDismiss.bind(this);`
+- 38
+  - Unidirectional data flow of React:
+    - An action is triggered in the view layer
+    - A function or class method modifies the local component state
+    - The `render()` method of the component runs and updates the view.
+- Exercises
+  - [State and Lifecycle](https://reactjs.org/docs/state-and-lifecycle.html)
+    - 5 steps to convert a function component to a class:
+      - 1: Create an ES6 class with the same name, extending `React.Component`
+      - 2: Add a single empty `render()` method.
+      - 3: Move the body of the function inside `render()`.
+      - 4: Replace `props` with `this.props` in the `render()` body.
+      - 5: Delete the remaining empty function declaration.
+    - 3 steps to move `date` from props to a state:
+      - 1: Replace `this.props.date` with `this.state.data` in `render()`.
+      - 2: Add a class constructor that sets the initial `this.state`.
+      - 3: Remove the `date` prop.
+    - Mounting: When a component is rendered to the DOM for the first time.
+      - `componentDidMount()`
+    - Unmounting: When a component is removed from the DOM.
+      - `componentWillUnmount()`
+    - 3 things to know about `setState()`:
+      - 1: Do not modify the state directly
+      - 2: State updates may be asynchronous
+        - React may batch multiple calls into a single update.
+        - Consider using a second form of `setState()` that accepts a function. The function receives the previous state as its first argument and the props at the time of update as the second argument.
+      - 3: State updates are (shallowly) merged
+      - The data flows down
+        - Neither the parent nor the child should know or care whether a certain component is stateful or stateless or is defined as a function or a class.
+
+## Bindings
+
+- 39
+  - Class methods don't automatically bind `this` to the class instance.
+- 41
+  - Don't bind class methods inside `render()`; it will bind every time the component updates and hurt performance.
+  - Don't define functions inside the constructor; the constructor should just be used for instantiating the class and its properties, not for business logic.
+- 42
+
+  - Class methods can be autobound with ES6 arrow functions.
+
+    - E.g.,
+
+    ```
+    onClickMe = () => {
+      console.log(this);
+    }
+    ```
+
+    - vs.
+
+    ```
+    constructor() {
+      super();
+
+      this.onClickMe = this.onClickMe.bind(this);
+    }
+
+    onClickMe() {
+      console.log(this);
+    }
+    ```
+
+  - Though note that the official React documentation uses the class method bindings in the constructor.
+
+- Exercises
+  - [react-alternative-class-component-syntax](https://github.com/the-road-to-learn-react/react-alternative-class-component-syntax)
+    - Class field declarations: can initialize local state without using the constructor, and declare class methods by arrow functions without also needing to bind them.
+
+## Event Handler
+
+- 44
+  - A function must be passed to an event handler. (I.e., the expression needs to return a function, not just be a function.)
+- 48
+  - Using arrow functions in event handlers impacts performance. Every time `render()` runs, the handler instantiates the higher-order arrow function.
+    - If this is a concern (in data-intense applications), consider implementing a dedicated component to bind the method in the constructor. For most applications, this is premature optimization.
+
+## Interactions with Forms and Events
+
+- 49
+  - We use synthetic events to access values in an event payload.
+- 50
+  - When using a handler in your element, you get access to the synthetic React event in your callback function's signature (e.g., `onSearchChange(event)`).
+- 52
+  - `this.setState()` is a shallow merge, preserving the sibling properties.
+- 53
+  - Higher-order function: Passing a value into a function which then returns a new function
+- Exercises
+  - [Handling Events](https://reactjs.org/docs/handling-events.html)
+    - Differences betweeen events from React elements and events from DOM elements:
+      - React events are named using camelCase (instead of lowercase)
+      - For JSX, pass a function as the event handler (instead of a string)
+      - You cannot return `false` to prevent default behavior.
+        - `preventDefault` must be called explicitly.
+      - You should not need to call `addEventListener` - should just be able to provide a listner when the element is initially rendered.
+    - Generally, if you refer to a method without `()` (e.g., `onClick={this.handleClick})`), you should bind that method.
+    - Two ways to get around binding:
+      - 1: Use the (experimental, but enabled by default with Create React App) public class fields syntax.
+      - 2: Use an arrow function in the callback.
+        - Though this creates a different callback each time. This may cause extra re-rendering for lower components. As a result, prefer either binding methods in the constructor or using the class fields syntax.
+  - [Higher-order function](https://en.wikipedia.org/wiki/Higher-order_function)
+    - A higher-order function (known, in mathematics, as an _operator_ or a _functional_) does at least one of the following:
+      - 1: Takes a function as an argument
+      - 2: Returns a function
+    - All other fuctions are first-order functions.
+
+## ES6 Destructuring
+
+- Exercises
+
+  - [Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+
+    - Handy for swapping variables: `[a, b] = [b, a]`
+    - When using object literal destructuring assignment without a declaration, parentheses are required:
+      ```
+      var a, b;
+      ({a, b} = {a: 1, b: 2});
+      ```
+      - vs. `{a, b} = {a: 1, b: 2}`
+        - `{a, b}` is evaluated as a block and not an object literal.
+    - Destructuring can be used to unpack a property from an object and assign it to a variable with a different name.
+
+      ```
+      var o = {p: 42, q: true};
+      var {p: foo, q: bar} = o;
+
+      console.log(foo); // 42
+      console.log(bar); // true
+      ```
+
+    - Nested object and array destructuring:
+
+      ```
+      const metadata = {
+        title: 'Scratchpad',
+        translations: [
+          {
+            locale: 'de',
+            localization_tags: [],
+            last_edit: '2014-04-14T08:43:37',
+            url: '/de/docs/Tools/Scratchpad',
+            title: 'JavaScript-Umgebung'
+          }
+        ],
+        url: '/en-US/docs/Tools/Scratchpad'
+      };
+
+      let {
+        title: englishTitle, // rename
+        translations: [
+          {
+            title: localeTitle, // rename
+          },
+        ],
+      } = metadata;
+
+      console.log(englishTitle); // "Scratchpad"
+      console.log(localeTitle);  // "JavaScript-Umgebung"
+      ```
+
+    -
+
+## Controlled Components
+
+- 59
+  - Form elements (`<input>`, `<textarea>`, `<select>`) hold their own state in plan HTML.
+    - These are considered uncontrolled components, because they handle their own state.
+    - In React, we only want controlled components.
+      - To achieve this, we set the `value` attribute of the field.
+- Exercises
+  - [Forms](https://reactjs.org/docs/forms.html)
+    - Controlled component: A element whose value is controlled by React (via `setState()`).
+    - With a controlled component, every stat mutation will have an associated handler function.
+    - In HTML, a `<textarea>` element is defined by its children; in React, it uses a `value` attribute.
+    - Instead of adding a `selected` attribute on an `<option>` child of a `<select>` element, React uses a `value` attribute on the `<select>` element itself.
+    - A file input tag (`<input type="file" />`) is an uncontrolled component, since it's read-only.
+    - [Formik](https://jaredpalmer.com/formik) offers a complete form solution, including validation, tracking visited fields, and handling submission.
+      - It's built on the same principles as controlled components.
+  - [react-controlled-components-examples](https://github.com/the-road-to-learn-react/react-controlled-components-examples)
+
+## Split Up Components
+
+- 63
+  - The `props` (short for `properties`) object is accessible via the class instance by using `this`. It has all the values passed to the components. This enables components to pass properties down the component tree.
+
+## Composable Components
+
+- 64
+  - The `children` prop is used to pass elements (unknown to the component itself) to components from above.
+    - This makes it possible to compose components together.
+    - Strings, elements, and entire element trees can be passed.
+- Exercises
+  - [Composition vs Inheritance](https://reactjs.org/docs/composition-vs-inheritance.html)
+    - Recommendation: Use composition, rather than inheritance, to reuse code between components.
+    - Expecially for components that do not know their children ahead of time, use the `children` prop to pass the children elements directly into their output.
+      - If you have multiple 'holes' in your application, consider using additional descriptive props (beyond `children`).
+    - Another case for composition: When a more 'specific' component renders a more 'generic' one, configuring it with props.
+    - Facebook has not found any cases where they would recommend using inheritance instead of composition.
+      - If you want to reuse non-UI functionality, consider extracting it into a JavaScript module (so it can be imported without being extended).
+  - [React Component Composition](https://www.robinwieruch.de/react-component-composition/)
+    - Composition: The arrangement of ingredients to create something bigger.
+    - Everything you do within a function is composition of ingredients and their arrangement. When a function is made up of functions, then it's the composition of functions.
+    - Note: [React Testing Tutorial: Test Frameworks & Components Tests](https://www.robinwieruch.de/react-testing-tutorial/)
+    - Use the [slot pattern](https://www.robinwieruch.de/react-pass-props-to-component/) when you have more than one child that you want to compose into another component (so the component doesn't have to know ahead of time what will be passed in).
+    - React Router - used to compose dynamic components (depending on the selected route) into the Route components.
+      - The App component displays a static frame of components that are always visible, but changes the inner content depending on the URL.
+      - Advanced patterns for component composition:
+        - [Render Props Components](https://www.robinwieruch.de/react-render-props-pattern/)
+          - An extension of the slot pattern, where a function returns the thing you want to render (rather than you passing it directly).
+        - [Higher-Order Components](https://www.robinwieruch.de/gentle-introduction-higher-order-components/)
+          - Receive a component as input and then outputs an enhanced version of it.
+
+## Reusable Components
+
+- 66
+  - Using components instead of even relatively simple elements (such as `Button` vs. `button`) can make a big difference in the long run for isolating the impact of changes: a single source of truth.
+- 67
+  - When a prop is optional, assigning a default value is a more explicit way of indicating such.
+- Exercises
+  - [How to pass props to components in React](https://www.robinwieruch.de/react-pass-props-to-component/)
+    - Props are used to pass data from component to component.
+    - Props are read only.
+    - There is no way to pass props from a child to a parent component.
+      - But you can pass functions from parent to child components. The child can make use of these functions, and the functions may change the state in a parent component (and then the changed state is passed down to the child and the components re-render). -> Lifting the state up
+    - The component receiving data as props just receives props. It doesn't differentiate between props or state (or derived properties).
+      - Everything incoming is props; everything managed by the component itself is state.
+    - Consider using props spreading to spread a whole object with key-value pairs down to a child component.
+    - Note: [React prop-types](https://reactjs.org/docs/typechecking-with-proptypes.html) can be used for type checking (even without using TypeScript).
+    - Render prop components
+      - A render prop is a function passed as a prop (often called `render`, though the name is unimportant). The function receives arguments but also renders JSX.
+    - Prop drilling
+      - When all the in-between components in a hierarchy need to pass the props along, even though they aren't interested in the props.
+      - The slot pattern is one solution.
+        - This enables you to distribute the props at a top level to all slotted components.
+      - [React's Context API](https://www.robinwieruch.de/react-context-api/) is another solution.
+        - Every interested component can consume the props passed by React's Context API.
+    - How to set props to state?
+      - Initial state can simply be derived from props.
+      - For incoming, changing props, use the `getDerivedStateFromProps(props, state)` lifecycle method. Use this selectively; think twice about the implementation logic before using it. See [You Probably Don't Need Derived State](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html)
+    - The `key` itself cannot be passed as a prop (_key is not a prop. Trying to pass it..._); but its value can be passed as an additional prop.
+    - When using [styled components](https://github.com/styled-components/styled-components), the style becomes co-located with the components (and actually becomes a component, itself).
+      - To pass (beyond the default) props to a styled component, you can use string interpretation in the template literal.
+    - For routing, use React Router (an [essential React library](https://www.robinwieruch.de/essential-react-libraries-framework/)); also consider using the `withRouter()` HOC from React Router.
+
+## Component Declarations
+
+- 69
+  - Types of components
+    - Functional Stateless Components
+      - Input: props
+      - Output: a component instance in JSX
+      - Stateless: No local state
+      - No `this` object
+      - No lifecycle methods (except for `render()`, which is applied implicitly).
+    - ES6 Class Components
+      - Extend from the React component (and brings in all the lifecycle methods available in the React component API).
+      - Provides access to `this.state` and `this.setState()`.
+    - React.createClass
+      - Used in older versions of React; deprecated.
+  - Rule of thumb: Use functional stateless components by default; if you need local state or component lifecycle methods, refactor it to an ES6 class component.
+- 70
+  - Best practice: Destructure `props` in the function signature (of a functional stateless component)
+  - An implicit `return` is attached in a concise body.
+    - This forces `props` as input and JSX as output.
+    - Though a block body can be used to make space for doing something else first (and then specifying `return()`).
+- Exercises
+  - [Components and Props](https://reactjs.org/docs/components-and-props.html)
+    - Always start component names with a capital letter; React treats components starting with lowercase letters as DOM tags.
+    - Name props from the component's point of view rather than the context in which it's being used.
+    - All React components must act like pure functions with respect to their props.
+
+## Styling Components
+
+- 77
+  - React styling options to consider
+    - [styled-components](https://github.com/styled-components/styled-components)
+      - [styled-components.com](https://www.styled-components.com/)
+    - [CSS Modules](https://github.com/css-modules/css-modules)
+      - [create-react-app with CSS Modules](https://www.robinwieruch.de/create-react-app-css-modules/)
+        - When using `create-react-app`, CSS modules work out of the box - but thefiles need to be named `.module.css`.
+    - [Saas](https://sass-lang.com/)
+      - [create-react-app with Sass](https://www.robinwieruch.de/create-react-app-with-sass-support/)
+        - When using `create-react-app` and installing Sass (`npm install node-sass --save`), no additional configuration is necessary to enable Sass support.
+    - UI Libraries
+      - [Semantic UI](https://www.robinwieruch.de/react-semantic-ui-tutorial/)
+        - `npm install semantic-ui-react`
+        - `import 'semantic-ui-css/semantic.min.css';`
+          - In React entry point file where React hooks into the DOM.
+      - Material UI
+  - For someone new to React, Robin's recommends sticking with pure CSS and inline styles.
+
+# Getting Real with APIs
