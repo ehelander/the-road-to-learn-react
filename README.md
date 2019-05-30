@@ -1,5 +1,3 @@
-# the-road-to-learn-react
-
 # Foreward
 
 ## FAQ
@@ -13,7 +11,7 @@
 ## Hi, my name is React.
 
 - 2
-  - [10 Reasons why I moved from ANgular to React](https://www.robinwieruch.de/reasons-why-i-moved-from-angular-to-react/)
+  - [10 Reasons why I moved from Angular to React](https://www.robinwieruch.de/reasons-why-i-moved-from-angular-to-react/)
 - Exercises
   - [Essential React Libraries in 2019](https://www.robinwieruch.de/essential-react-libraries-framework/)
   - [How to learn React, Angular or Vue in 2019?](https://www.robinwieruch.de/how-to-learn-framework/)
