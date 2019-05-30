@@ -458,3 +458,25 @@
     - Always start component names with a capital letter; React treats components starting with lowercase letters as DOM tags.
     - Name props from the component's point of view rather than the context in which it's being used.
     - All React components must act like pure functions with respect to their props.
+
+## Styling Components
+
+- 77
+  - React styling options to consider
+    - [styled-components](https://github.com/styled-components/styled-components)
+      - [styled-components.com](https://www.styled-components.com/)
+    - [CSS Modules](https://github.com/css-modules/css-modules)
+      - [create-react-app with CSS Modules](https://www.robinwieruch.de/create-react-app-css-modules/)
+        - When using `create-react-app`, CSS modules work out of the box - but thefiles need to be named `.module.css`.
+    - [Saas](https://sass-lang.com/)
+      - [create-react-app with Sass](https://www.robinwieruch.de/create-react-app-with-sass-support/)
+        - When using `create-react-app` and installing Sass (`npm install node-sass --save`), no additional configuration is necessary to enable Sass support.
+    - UI Libraries
+      - [Semantic UI](https://www.robinwieruch.de/react-semantic-ui-tutorial/)
+        - `npm install semantic-ui-react`
+        - `import 'semantic-ui-css/semantic.min.css';`
+          - In React entry point file where React hooks into the DOM.
+      - Material UI
+  - For someone new to React, Robin's recommends sticking with pure CSS and inline styles.
+
+# Getting Real with APIs
