@@ -683,3 +683,28 @@
     - `npm install enzyme enzyme-adapter-react-16 sinon --save-dev`
     - See also: [React Testing Tutorial: Test Frameworks & Component Tests](https://www.robinwieruch.de/react-testing-tutorial/)
     - See also: [Node Testing Setup with Mocha, Chai, Sinon](https://www.robinwieruch.de/node-js-testing-mocha-chai/)
+
+## ES6 Spread Operators
+
+- 87
+  - ES6's `Object.assign()` takes a target object as a first argument (can be an empty object); all additional arguments are source objects that get merged into the target object.
+    - Because no source object gets mutated, it embraces immutability.
+- 88
+  - But a simpler way to achieve this is with the ES6 spread operator: It takes every value from an array or object and copied it to another array or object.
+    - The object spread oberator is already being used in the React community and has been incorporated into `create-react-app`.
+- Exercises
+  - [Object.assign()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+    - It also returns the target object.
+    - Later sources' properties will overwrite earlier ones.
+    - Because it assigns properties (vs. copying or defining new properties), it may be unsuitable for merging new properties into a protype if the merge sources contain getters.
+      - Consider using `Object.getOwnPropertyDescriptor()` and `Object.defineProperty()` instead.
+    - Not suitable for deep cloning (since if the source value is a reference to an object, it only copies that reference value).
+      - Vs. `let obj3 = JSON.parse(JSON.stringify(obj1));`
+  - [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
+    - For object literals (new in ECMAScript 2018): `let objClone = { ...obj };`
+    - The spread operator can be used where formerly `.apply()` was necessary for using the elements of an array as arguments to a function.
+    - May be unsuitable for copying multidimensional arrays.
+    - `Object.assign()` triggers setters, whereas the spread syntax does not.
+    - Rest syntax looks exactly like spread syntax; but rest syntax is sortof the opposite of spread syntax
+      - spread: expands an array into its elements
+      - rest: collects multiple elements and condenses them into a single element.
