@@ -603,3 +603,83 @@
     - As of React 16, errors that were not caught by any error boundary will result in unmounting of the whole React component tree.
     - React 16 prints all errors during rendering to the console in development; this must be disabled in production.
     - `try` / `catch` only works for imperative code; with the declarative nature of React, error boundaries are more fitting.
+
+## Fetching Data
+
+- 83
+  - Lifecycle method in which to fetch data: `componentDidMount()`
+- 85
+  - Mandatory step in a native fetch with JSON data structures: Response is transformed into a JSON data structure (`.json()`).
+- 86
+  - In addition to the native fetch API (supported by most browsers - as is confirmed by `create-react-app`), [axios](https://github.com/axios/axios) is another option.
+- Exercises
+
+  - [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
+    - Template literals: Previously known as 'template strings'
+    - Escape a back-tick with a backslach `\`
+    - Any newline characters inserted are part of the template literal.
+    - Template literals can be nested
+    - Tagged templates allow you to parse template literals with a function.
+      - The first argument to the tag function provides a `raw` argument, giving access to the strings as they were entered (before processing escape sequences).
+      - See also `String.raw`
+  - [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+    - Similar to `XMLHttpRequest`, but with a more powerful and flexible feature set.
+    - `fetch()` takes one mandatory argument: the path to the resource you want to fetch
+      - A secondal option `init` object allows you to control a number of settings
+    - It returns a `Promise` that resolves to the `Response` to that request.
+  - [How to fetch data in React](https://www.robinwieruch.de/react-fetching-data/)
+
+    - Determining which component in a hierarchy should fetch data from an API depends on:
+      - #1: Who is interested in the data?
+        - The fetching component should be a common parent.
+      - #2: Where do you want to show a conditional loading indicator when the fetched data from the asynchronous request is pending?
+        - Such as in a common parent. Or at a higher level. Or the loading indicator could be passed to the children.
+      - #3: Where do you want to show an optional error message when the request fails?
+        - Similar criteria as for #2.
+    - Most minimal example to fetch data:
+
+    ```
+    import React, { Component } from 'react';
+
+    class App extends Component {
+      constructor(props) {
+        super(props);
+
+        this.state = {
+          data: null,
+        };
+      }
+
+      componentDidMount() {
+        fetch('https://api.mydomain.com')
+          .then(response => response.json())
+          .then(data => this.setState({ data }));
+      }
+
+      ...
+    }
+
+    export default App;
+    ```
+
+    - Note: [How to fetch data with React Hooks?](https://www.robinwieruch.de/react-hooks-fetch-data/)
+    - Things you might want to store in your state:
+      - Fetched data
+      - Loading state
+        - Toggle an `isLoading` property fron `false` to `true`; in `render()`, conditionally display the loading state based on `isLoading`.
+      - Error state
+        - When using promises, use `catch()` to handle errors and set the error state flag.
+          - Note, though, that the native fetch API doesn't use its catch block for every erroneous status code (e.g., 404). You can force it to go to `catch()` by throwing an error when the response doesn't match the expected data (e.g., `if (response.ok) { return response.json(); } else { throw new Error('Something went wrong...');}`)
+          - And, similar to above, show the error message via conditional rendering.
+    - `axios` (`npm install axios`) is a great alternative library for fetching data.
+      - It already returns a JSON response (so the `.json()` step is unnecessary).
+      - All errors are caught in the `catch()` block.
+    - Robin's testing recommendations
+      - Jest
+      - Mocha
+      - Chai
+      - Enzyme
+      - Sinon
+    - `npm install enzyme enzyme-adapter-react-16 sinon --save-dev`
+    - See also: [React Testing Tutorial: Test Frameworks & Component Tests](https://www.robinwieruch.de/react-testing-tutorial/)
+    - See also: [Node Testing Setup with Mocha, Chai, Sinon](https://www.robinwieruch.de/node-js-testing-mocha-chai/)
