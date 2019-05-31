@@ -480,3 +480,126 @@
   - For someone new to React, Robin's recommends sticking with pure CSS and inline styles.
 
 # Getting Real with APIs
+
+- [Nobody introduced me to the API - A journey from packages to RESTful services with Roy T. Fielding](https://www.robinwieruch.de/what-is-an-api-javascript/)
+  - [How to Connect to an API with JavaScript](https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/)
+
+## Lifecycle Methods
+
+- 80
+  - Lifecycle methods can be used in ES6 class components, but not functional stateless components
+  - Mounting
+    - `constructor()`
+      - Set an initial component state
+      - Bind class methods
+    - `getDerivedStateFromProps(props, state)`
+      - Should return an object to update the state, or null to update nothing
+      - Only for rare cases (when the state depends on changes in props over time)
+      - Static method; no access to instance
+    - `render()`
+      - Mandatory
+      - Should be pure
+    - `componentDidMount()`
+      - Good time for asynchronous API requests
+  - Updating (due to state/props change)
+    - `getDerivedStateFromProps()`
+    - `shouldComponentUpdate(nextProps, nextState)`
+      - Always called when component updates due to state or props changes
+      - Useful for performance optimization in mature apps
+      - Return a boolean, indicating whether or not the component should render
+    - `render()`
+    - `getSnapshotBeforeUpdate(prevProps, prevState)`
+      - Invoked before the most recently rendered output is committed to the DOM
+      - Useful in rare cases when the component needs to capture information from the DOM before it is potentially changed.
+    - `componentDidUpdate(prevProps, prevState, snapshot)`
+      - Invoked immediately after rendering (but not for the initial render).
+      - Useful for DOM operations or for additional asynchronous requests.
+      - Receives returned value from `getSnapshotBeforeUpdate()` (as `snapshot` parameter), if implemented.
+  - Unmounting
+    - `componentWillUnmount()`
+      - Useful for cleanup tasks
+  - Error handling
+    - `componentDidCatch(error, info)`
+      - Introduced in React 16 as a way to catch errors in components.
+- Exercises
+  - [React.Component](https://reactjs.org/docs/react-component.html)
+    - The only method you must defined in a React.Component subclass is `render()`.
+    - `static getDerivedStateFromError()`
+    - [Lifecycle Diagram](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
+    - `render()`
+      - Should not modify component state, should return the same result each time it's invoked, and should not directly interact with the browser.
+    - `constructor(props)`
+      - If you don't initialize state and you don't bind methods, you don't need to implement a constructor.
+      - Call `super(props)` before any other statement.
+      - Two purposes:
+        - Initialize local state (by setting `this.state`; do not use `setState()` in the constructor)
+        - Bind event handler methods to an instance.
+      - Do not copy props into state (unless you want to ignore prop updates: in that case, rename it).
+    - `componentDidMount()`
+      - Initialization requiring DOM nodes should go here
+      - Good place for instantiating network requests to load data from a remote endpoint.
+      - Good place to set up subscriptions
+        - Remember to unsubscribe in `componentWillUnmount()`
+      - Can call `setState()` immediately; but it will trigger an extra rendering.
+        - Because it happens before the browser updates the screen, the user won't see the intermediate state.
+        - Hurts performance. You should ususally be able to set the initial state in the `constructor()`. But this can be useful when working with modals and tooltips that need to measure a DOM node before rendering something that depends on its size or position.
+    - `componentDidUpdate(prevProps, prevState, snapsho)`
+      - Useful for an opportunity to operate on the DOM where the component has been updated.
+      - Good place for network requests (as long as you compare current vs. previous props, since they may have not changed and a network request may be unnecessary).
+      - Can call `setState()` immediately, but it must be wrapped in a condition to compare props - otherwise, an infinite loop will result.
+    - `componentWillUnmount()`
+      - Perform any cleanup here (invalidating timers, cancelling network requests, unsubscribing)
+      - Do not call `setState()`, since the component will never be re-rendered.
+    - Rare methods
+      - `shouldComponentUpdate(nextProps, nextState)`
+        - Performanc optimization
+        - Lets React know if a component's output is not affected by a change in state or props.
+          - Doing deep equality checks or using `JSON.stringify()` will hurt performance.
+        - Consider using [PureComponent](https://reactjs.org/docs/react-api.html#reactpurecomponent) instead.
+      - `static getDerivedStateFromProps(props, state)`
+        - Might be handy for a Transition component.
+        - Simpler alternatives
+          - Perform a side effect: use `componentDidUpdate()`
+          - Re-compute some data only when a prop changes: use a [memoization helper](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization)
+          - Reset some state when a prop changes: use a [fully-controlled](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-controlled-component) or [fully-uncontrolled with a key](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-uncontrolled-component-with-a-key) component
+      - `getSnapshotBeforeUpdate(prevProps, prevState)`
+        - Could be useful for capturing some information about the DOM, such as scroll position (e.g., in a chat thread), before the most recently rendered output is committed to the DOM.
+    - Error boundaries
+      - Catch JavaScript errors anywhere in the child tree (during rendering, in lifecycle methods, and in constructors), and display a fallback UI instead of the component tree that crashed.
+      - A class component becomes an error boundary if it defines either `static getDerivedStateFromError()` or `componentDidCatch()`
+      - Note that an error boundary cannot catch an error in itself, but only in components below it.
+      - `getDerivedStateFromError()`
+        - Called during render phase; no side-effects permitted
+      - `componentDidCatch(error, info)`
+        - Called during commit phase; side-effects are permitted (such as for logging errors)
+    - Other APIs
+      - `setState(updater[, callback])`
+        - A request, rather than an immeidate command to update the component. React may delay and batch updates.
+        - If a state value is needed immediately after calling `setState()`, use `componentDidUpdate()` or the `setState()` callback.
+          - General recommendation: Use `componentDidUpdate()` instead.
+      - `forceUpdate()`
+        - Avoid use if possible. Skips `shouldComponentUpdate()`.
+    - Class Properties
+      - `defaultProps`
+        - Sets default props for the class.
+        - Used for undefined props, but not for null props.
+      - `displayName`
+        - Used in debugging messages.
+        - Not usually needed; can be useful when you want to display a different name than the function/class or when creating higher-order components.
+    - Instance Properties
+      - `props`
+        - `this.props` contains the props that were defined by the caller of this component.
+        - `this.props.children` is a special prop (defined by child tags in JSX rather than the tag itself)
+      - `state`
+        - Contains data specific to this component that may change over time.
+        - User-defined; should be a plain JavaScript object.
+        - If a value is not used for rendering or data flow, define it as a field on the component instance (instead of using state).
+  - [State and Lifecycle](https://reactjs.org/docs/state-and-lifecycle.html)
+  - [Error Handling in React 16](https://reactjs.org/blog/2017/07/26/error-handling-in-react-16.html)
+    - Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.
+    - A class component becomes an error boundary if it defines a new lifecycle method called `componentDidCatch(error, info)`.
+    - Only class components can be error boundaries.
+    - Typically, you'll declare a single error boundary component and use it throughout an app.
+    - As of React 16, errors that were not caught by any error boundary will result in unmounting of the whole React component tree.
+    - React 16 prints all errors during rendering to the console in development; this must be disabled in production.
+    - `try` / `catch` only works for imperative code; with the declarative nature of React, error boundaries are more fitting.
