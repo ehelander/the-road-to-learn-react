@@ -708,3 +708,57 @@
     - Rest syntax looks exactly like spread syntax; but rest syntax is sortof the opposite of spread syntax
       - spread: expands an array into its elements
       - rest: collects multiple elements and condenses them into a single element.
+
+## Conditional Rendering
+
+- 90
+  - Approaches to implement conditional rendering:
+    - if-else statement
+    - ternary operator
+    - logical &&
+- Exercises
+  - [All React Conditional Rendering Techniques](https://www.robinwieruch.de/conditional-rendering-react/)
+    - If else
+      - Most basic option
+      - A component that returns null will render nothing.
+    - Ternary operator
+      - More concise than if else
+    - Logical && operator
+      - Enables more concise mixing conditions that would return null: short-circut evaluation.
+      - More concise than a ternary operator when you would return null as a condition.
+    - Switch case operator
+      - A `default` condition must be supplied (returning either an element or null).
+      - When a component has a conditional rendering based on a state, it makes sense to describe the interface of the component with `React.PropTypes`.
+    - Enums
+      - More readable than switch case
+    - Higher order components
+      - [Learn Higher Order Components with Conditional Rendering in React](https://www.robinwieruch.de/gentle-introduction-higher-order-components/)
+    - External templating components
+    - Robin's opinion:
+      - if-else
+        - is the most basic conditional rendering
+        - beginner friendly
+        - use if to opt-out early from a render method by returning null
+      - ternary operator
+        - use it over an if-else statement
+        - it is more concise than if-else
+      - logical && operator
+        - use it when one side of the ternary operation would return null
+        - but be careful that you don’t run into bugs when using multiple conditions
+      - switch case
+        - verbose
+        - can only be inlined with self invoking function
+        - avoid it, use enums instead
+      - enums
+        - perfect to map different states
+        - perfect to map more than one condition
+      - multi-level/nested conditional renderings
+        - avoid them for the sake of readability
+        - split up components into more lightweight components with their own simple conditional rendering
+        - use HOCs
+      - HOCs
+        - use them to shield away conditional rendering
+        - components can focus on their main purpose
+      - external templating components
+        - avoid them and be comfortable with JSX and JavaScript
+  - [Conditional Rendering](https://reactjs.org/docs/conditional-rendering.html)
