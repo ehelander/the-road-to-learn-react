@@ -762,3 +762,18 @@
       - external templating components
         - avoid them and be comfortable with JSX and JavaScript
   - [Conditional Rendering](https://reactjs.org/docs/conditional-rendering.html)
+
+## Client- or Server-side Search
+
+- 95
+  - Two ways to prevent fetching data from the API upon each input field change:
+    - Add a button, using an `onClick()` handler.
+    - Debounce (delay) the `onChange()` function.
+- Exercises
+  - [SyntheticEvent](https://reactjs.org/docs/events.html)
+    - A `SyntheticEvent` is passed to event handlers.
+      - `SyntheticEvent`: A cross-browser wrapper around the browser's native event (same interface as the browser's native event).
+      - If the underlying browser event is needed, use `nativeEvent`.
+    - `SyntheticEvent` is pooled for performance: the object is reused and all properties are nullified after the event callback has been invoked (i.e., you cannot access the event asynchronously).
+      - Though note that calling `event.persist()` will remove the synthetic event from the pool and allow references to the event to be retained by user code.
+  - [HN Search API](https://hn.algolia.com/api)
