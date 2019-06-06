@@ -789,3 +789,5 @@
     - The default argument is evaluated at call time, so a new object would be created each time the function is called.
     - Default parameters are available to later default parameters.
   - [HN Search API](https://hn.algolia.com/api)
+
+## Client Cache
