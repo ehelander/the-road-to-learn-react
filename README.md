@@ -803,3 +803,37 @@
       - Error boundaries only catch errors for the components _below_ them in the tree.
     - As of React 16, errors that are not caught by any error boundary result in unmounting of the entire React component tree.
     - Ensure the stack trace print to the console is disabled in production.
+
+## Axios instead of Fetch
+
+- 113
+  - Not all browsers, especially older browsers, support the native fetch API.
+  - Testing in a headless browser environment can lead to issues when using the native fetch API.
+  - A couple ways to make this work:
+    - Older browsers: polyfills
+    - Testing: [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch)
+    - `npm install axios`
+    - `import axios from 'axios';`
+    - Can use `axios()` instead of `fetch()`
+      - Takes a URL as an argument, returns a promise.
+      - Don't have to transform the returned URL to JSON, since axios wraps the result into a `data` object in JavaScript.
+- 114
+  - `axios()` uses HTTP GET by default
+    - Explicit: `axios.get()`
+    - POST: `axios.post()`
+    - axios is a powerful library to perform requests to remote APIs.
+    - **Recommendation**: Use `axios` instead of the native fetch API when requests become complex or you have to deal with promises.
+  - [Prevent React setState on unmounted Component](https://www.robinwieruch.de/react-warning-cant-call-setstate-on-an-unmounted-component/)
+    - Warnings usually show up when `this.setState()` is called on a component, even though the component was already unmounted (e.g., a component is not rendered due to conditional rendering, or the user navigated away from a component).
+    - Handle this issue by either
+      - Aborting the request when the component unmounts
+        - But most promise-based libraries & APIs don't implement aborting a request
+      - Prevening `this.setState()` on an unmounted component
+    - Workaround
+      - Introduce a class field (on the component instance, not local state management) that holds the lifecycle state of your component to prevent `this.setState()` from being called: `_isMounted`
+        - Initialize it to false.
+        - Change it to true when the component is mounted.
+        - Set it to false when the component is unmounted.
+      - In asynchronous requests, check `if (this._isMounted)` before calling `this.setState()`.
+- Exercises
+  - [Why Frameworks matter](https://www.robinwieruch.de/why-frameworks-matter/)
