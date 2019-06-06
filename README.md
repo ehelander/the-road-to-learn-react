@@ -480,3 +480,360 @@
   - For someone new to React, Robin's recommends sticking with pure CSS and inline styles.
 
 # Getting Real with APIs
+
+- [Nobody introduced me to the API - A journey from packages to RESTful services with Roy T. Fielding](https://www.robinwieruch.de/what-is-an-api-javascript/)
+  - [How to Connect to an API with JavaScript](https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/)
+
+## Lifecycle Methods
+
+- 80
+  - Lifecycle methods can be used in ES6 class components, but not functional stateless components
+  - Mounting
+    - `constructor()`
+      - Set an initial component state
+      - Bind class methods
+    - `getDerivedStateFromProps(props, state)`
+      - Should return an object to update the state, or null to update nothing
+      - Only for rare cases (when the state depends on changes in props over time)
+      - Static method; no access to instance
+    - `render()`
+      - Mandatory
+      - Should be pure
+    - `componentDidMount()`
+      - Good time for asynchronous API requests
+  - Updating (due to state/props change)
+    - `getDerivedStateFromProps()`
+    - `shouldComponentUpdate(nextProps, nextState)`
+      - Always called when component updates due to state or props changes
+      - Useful for performance optimization in mature apps
+      - Return a boolean, indicating whether or not the component should render
+    - `render()`
+    - `getSnapshotBeforeUpdate(prevProps, prevState)`
+      - Invoked before the most recently rendered output is committed to the DOM
+      - Useful in rare cases when the component needs to capture information from the DOM before it is potentially changed.
+    - `componentDidUpdate(prevProps, prevState, snapshot)`
+      - Invoked immediately after rendering (but not for the initial render).
+      - Useful for DOM operations or for additional asynchronous requests.
+      - Receives returned value from `getSnapshotBeforeUpdate()` (as `snapshot` parameter), if implemented.
+  - Unmounting
+    - `componentWillUnmount()`
+      - Useful for cleanup tasks
+  - Error handling
+    - `componentDidCatch(error, info)`
+      - Introduced in React 16 as a way to catch errors in components.
+- Exercises
+  - [React.Component](https://reactjs.org/docs/react-component.html)
+    - The only method you must defined in a React.Component subclass is `render()`.
+    - `static getDerivedStateFromError()`
+    - [Lifecycle Diagram](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
+    - `render()`
+      - Should not modify component state, should return the same result each time it's invoked, and should not directly interact with the browser.
+    - `constructor(props)`
+      - If you don't initialize state and you don't bind methods, you don't need to implement a constructor.
+      - Call `super(props)` before any other statement.
+      - Two purposes:
+        - Initialize local state (by setting `this.state`; do not use `setState()` in the constructor)
+        - Bind event handler methods to an instance.
+      - Do not copy props into state (unless you want to ignore prop updates: in that case, rename it).
+    - `componentDidMount()`
+      - Initialization requiring DOM nodes should go here
+      - Good place for instantiating network requests to load data from a remote endpoint.
+      - Good place to set up subscriptions
+        - Remember to unsubscribe in `componentWillUnmount()`
+      - Can call `setState()` immediately; but it will trigger an extra rendering.
+        - Because it happens before the browser updates the screen, the user won't see the intermediate state.
+        - Hurts performance. You should ususally be able to set the initial state in the `constructor()`. But this can be useful when working with modals and tooltips that need to measure a DOM node before rendering something that depends on its size or position.
+    - `componentDidUpdate(prevProps, prevState, snapsho)`
+      - Useful for an opportunity to operate on the DOM where the component has been updated.
+      - Good place for network requests (as long as you compare current vs. previous props, since they may have not changed and a network request may be unnecessary).
+      - Can call `setState()` immediately, but it must be wrapped in a condition to compare props - otherwise, an infinite loop will result.
+    - `componentWillUnmount()`
+      - Perform any cleanup here (invalidating timers, cancelling network requests, unsubscribing)
+      - Do not call `setState()`, since the component will never be re-rendered.
+    - Rare methods
+      - `shouldComponentUpdate(nextProps, nextState)`
+        - Performanc optimization
+        - Lets React know if a component's output is not affected by a change in state or props.
+          - Doing deep equality checks or using `JSON.stringify()` will hurt performance.
+        - Consider using [PureComponent](https://reactjs.org/docs/react-api.html#reactpurecomponent) instead.
+      - `static getDerivedStateFromProps(props, state)`
+        - Might be handy for a Transition component.
+        - Simpler alternatives
+          - Perform a side effect: use `componentDidUpdate()`
+          - Re-compute some data only when a prop changes: use a [memoization helper](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization)
+          - Reset some state when a prop changes: use a [fully-controlled](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-controlled-component) or [fully-uncontrolled with a key](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-uncontrolled-component-with-a-key) component
+      - `getSnapshotBeforeUpdate(prevProps, prevState)`
+        - Could be useful for capturing some information about the DOM, such as scroll position (e.g., in a chat thread), before the most recently rendered output is committed to the DOM.
+    - Error boundaries
+      - Catch JavaScript errors anywhere in the child tree (during rendering, in lifecycle methods, and in constructors), and display a fallback UI instead of the component tree that crashed.
+      - A class component becomes an error boundary if it defines either `static getDerivedStateFromError()` or `componentDidCatch()`
+      - Note that an error boundary cannot catch an error in itself, but only in components below it.
+      - `getDerivedStateFromError()`
+        - Called during render phase; no side-effects permitted
+      - `componentDidCatch(error, info)`
+        - Called during commit phase; side-effects are permitted (such as for logging errors)
+    - Other APIs
+      - `setState(updater[, callback])`
+        - A request, rather than an immeidate command to update the component. React may delay and batch updates.
+        - If a state value is needed immediately after calling `setState()`, use `componentDidUpdate()` or the `setState()` callback.
+          - General recommendation: Use `componentDidUpdate()` instead.
+      - `forceUpdate()`
+        - Avoid use if possible. Skips `shouldComponentUpdate()`.
+    - Class Properties
+      - `defaultProps`
+        - Sets default props for the class.
+        - Used for undefined props, but not for null props.
+      - `displayName`
+        - Used in debugging messages.
+        - Not usually needed; can be useful when you want to display a different name than the function/class or when creating higher-order components.
+    - Instance Properties
+      - `props`
+        - `this.props` contains the props that were defined by the caller of this component.
+        - `this.props.children` is a special prop (defined by child tags in JSX rather than the tag itself)
+      - `state`
+        - Contains data specific to this component that may change over time.
+        - User-defined; should be a plain JavaScript object.
+        - If a value is not used for rendering or data flow, define it as a field on the component instance (instead of using state).
+  - [State and Lifecycle](https://reactjs.org/docs/state-and-lifecycle.html)
+  - [Error Handling in React 16](https://reactjs.org/blog/2017/07/26/error-handling-in-react-16.html)
+    - Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.
+    - A class component becomes an error boundary if it defines a new lifecycle method called `componentDidCatch(error, info)`.
+    - Only class components can be error boundaries.
+    - Typically, you'll declare a single error boundary component and use it throughout an app.
+    - As of React 16, errors that were not caught by any error boundary will result in unmounting of the whole React component tree.
+    - React 16 prints all errors during rendering to the console in development; this must be disabled in production.
+    - `try` / `catch` only works for imperative code; with the declarative nature of React, error boundaries are more fitting.
+
+## Fetching Data
+
+- 83
+  - Lifecycle method in which to fetch data: `componentDidMount()`
+- 85
+  - Mandatory step in a native fetch with JSON data structures: Response is transformed into a JSON data structure (`.json()`).
+- 86
+  - In addition to the native fetch API (supported by most browsers - as is confirmed by `create-react-app`), [axios](https://github.com/axios/axios) is another option.
+- Exercises
+
+  - [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
+    - Template literals: Previously known as 'template strings'
+    - Escape a back-tick with a backslach `\`
+    - Any newline characters inserted are part of the template literal.
+    - Template literals can be nested
+    - Tagged templates allow you to parse template literals with a function.
+      - The first argument to the tag function provides a `raw` argument, giving access to the strings as they were entered (before processing escape sequences).
+      - See also `String.raw`
+  - [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+    - Similar to `XMLHttpRequest`, but with a more powerful and flexible feature set.
+    - `fetch()` takes one mandatory argument: the path to the resource you want to fetch
+      - A secondal option `init` object allows you to control a number of settings
+    - It returns a `Promise` that resolves to the `Response` to that request.
+  - [How to fetch data in React](https://www.robinwieruch.de/react-fetching-data/)
+
+    - Determining which component in a hierarchy should fetch data from an API depends on:
+      - #1: Who is interested in the data?
+        - The fetching component should be a common parent.
+      - #2: Where do you want to show a conditional loading indicator when the fetched data from the asynchronous request is pending?
+        - Such as in a common parent. Or at a higher level. Or the loading indicator could be passed to the children.
+      - #3: Where do you want to show an optional error message when the request fails?
+        - Similar criteria as for #2.
+    - Most minimal example to fetch data:
+
+    ```
+    import React, { Component } from 'react';
+
+    class App extends Component {
+      constructor(props) {
+        super(props);
+
+        this.state = {
+          data: null,
+        };
+      }
+
+      componentDidMount() {
+        fetch('https://api.mydomain.com')
+          .then(response => response.json())
+          .then(data => this.setState({ data }));
+      }
+
+      ...
+    }
+
+    export default App;
+    ```
+
+    - Note: [How to fetch data with React Hooks?](https://www.robinwieruch.de/react-hooks-fetch-data/)
+    - Things you might want to store in your state:
+      - Fetched data
+      - Loading state
+        - Toggle an `isLoading` property fron `false` to `true`; in `render()`, conditionally display the loading state based on `isLoading`.
+      - Error state
+        - When using promises, use `catch()` to handle errors and set the error state flag.
+          - Note, though, that the native fetch API doesn't use its catch block for every erroneous status code (e.g., 404). You can force it to go to `catch()` by throwing an error when the response doesn't match the expected data (e.g., `if (response.ok) { return response.json(); } else { throw new Error('Something went wrong...');}`)
+          - And, similar to above, show the error message via conditional rendering.
+    - `axios` (`npm install axios`) is a great alternative library for fetching data.
+      - It already returns a JSON response (so the `.json()` step is unnecessary).
+      - All errors are caught in the `catch()` block.
+    - Robin's testing recommendations
+      - Jest
+      - Mocha
+      - Chai
+      - Enzyme
+      - Sinon
+    - `npm install enzyme enzyme-adapter-react-16 sinon --save-dev`
+    - See also: [React Testing Tutorial: Test Frameworks & Component Tests](https://www.robinwieruch.de/react-testing-tutorial/)
+    - See also: [Node Testing Setup with Mocha, Chai, Sinon](https://www.robinwieruch.de/node-js-testing-mocha-chai/)
+
+## ES6 Spread Operators
+
+- 87
+  - ES6's `Object.assign()` takes a target object as a first argument (can be an empty object); all additional arguments are source objects that get merged into the target object.
+    - Because no source object gets mutated, it embraces immutability.
+- 88
+  - But a simpler way to achieve this is with the ES6 spread operator: It takes every value from an array or object and copied it to another array or object.
+    - The object spread oberator is already being used in the React community and has been incorporated into `create-react-app`.
+- Exercises
+  - [Object.assign()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+    - It also returns the target object.
+    - Later sources' properties will overwrite earlier ones.
+    - Because it assigns properties (vs. copying or defining new properties), it may be unsuitable for merging new properties into a protype if the merge sources contain getters.
+      - Consider using `Object.getOwnPropertyDescriptor()` and `Object.defineProperty()` instead.
+    - Not suitable for deep cloning (since if the source value is a reference to an object, it only copies that reference value).
+      - Vs. `let obj3 = JSON.parse(JSON.stringify(obj1));`
+  - [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
+    - For object literals (new in ECMAScript 2018): `let objClone = { ...obj };`
+    - The spread operator can be used where formerly `.apply()` was necessary for using the elements of an array as arguments to a function.
+    - May be unsuitable for copying multidimensional arrays.
+    - `Object.assign()` triggers setters, whereas the spread syntax does not.
+    - Rest syntax looks exactly like spread syntax; but rest syntax is sortof the opposite of spread syntax
+      - spread: expands an array into its elements
+      - rest: collects multiple elements and condenses them into a single element.
+
+## Conditional Rendering
+
+- 90
+  - Approaches to implement conditional rendering:
+    - if-else statement
+    - ternary operator
+    - logical &&
+- Exercises
+  - [All React Conditional Rendering Techniques](https://www.robinwieruch.de/conditional-rendering-react/)
+    - If else
+      - Most basic option
+      - A component that returns null will render nothing.
+    - Ternary operator
+      - More concise than if else
+    - Logical && operator
+      - Enables more concise mixing conditions that would return null: short-circut evaluation.
+      - More concise than a ternary operator when you would return null as a condition.
+    - Switch case operator
+      - A `default` condition must be supplied (returning either an element or null).
+      - When a component has a conditional rendering based on a state, it makes sense to describe the interface of the component with `React.PropTypes`.
+    - Enums
+      - More readable than switch case
+    - Higher order components
+      - [Learn Higher Order Components with Conditional Rendering in React](https://www.robinwieruch.de/gentle-introduction-higher-order-components/)
+    - External templating components
+    - Robin's opinion:
+      - if-else
+        - is the most basic conditional rendering
+        - beginner friendly
+        - use if to opt-out early from a render method by returning null
+      - ternary operator
+        - use it over an if-else statement
+        - it is more concise than if-else
+      - logical && operator
+        - use it when one side of the ternary operation would return null
+        - but be careful that you don’t run into bugs when using multiple conditions
+      - switch case
+        - verbose
+        - can only be inlined with self invoking function
+        - avoid it, use enums instead
+      - enums
+        - perfect to map different states
+        - perfect to map more than one condition
+      - multi-level/nested conditional renderings
+        - avoid them for the sake of readability
+        - split up components into more lightweight components with their own simple conditional rendering
+        - use HOCs
+      - HOCs
+        - use them to shield away conditional rendering
+        - components can focus on their main purpose
+      - external templating components
+        - avoid them and be comfortable with JSX and JavaScript
+  - [Conditional Rendering](https://reactjs.org/docs/conditional-rendering.html)
+
+## Client- or Server-side Search
+
+- 95
+  - Two ways to prevent fetching data from the API upon each input field change:
+    - Add a button, using an `onClick()` handler.
+    - Debounce (delay) the `onChange()` function.
+- Exercises
+  - [SyntheticEvent](https://reactjs.org/docs/events.html)
+    - A `SyntheticEvent` is passed to event handlers.
+      - `SyntheticEvent`: A cross-browser wrapper around the browser's native event (same interface as the browser's native event).
+      - If the underlying browser event is needed, use `nativeEvent`.
+    - `SyntheticEvent` is pooled for performance: the object is reused and all properties are nullified after the event callback has been invoked (i.e., you cannot access the event asynchronously).
+      - Though note that calling `event.persist()` will remove the synthetic event from the pool and allow references to the event to be retained by user code.
+  - [HN Search API](https://hn.algolia.com/api)
+
+## Paginated Fetch
+
+- 100
+  - Since `render()` is called before the data is fetched asynchronously, be sure to set a default value.
+- Exercises
+  - [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)
+    - Default JavaScript function parameter value: `undefined`
+    - Providing a default argument value will only set the value if it is `undefined` (including if `undefined` is passed); other falsy values will be passed.
+    - The default argument is evaluated at call time, so a new object would be created each time the function is called.
+    - Default parameters are available to later default parameters.
+  - [HN Search API](https://hn.algolia.com/api)
+
+## Client Cache
+
+## Error Handling
+
+- Exercises
+  - [Error Handling in React 16](https://reactjs.org/blog/2017/07/26/error-handling-in-react-16.html)
+    - Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed.
+    - A class component becomes an error boundary if it defines a new `componentDidCatch(error, info)` lifecycle method.
+      - `componentDidCatch()` works like a Javascript `catch {}` block.
+      - Only class components can be error boundaries.
+      - Error boundaries only catch errors for the components _below_ them in the tree.
+    - As of React 16, errors that are not caught by any error boundary result in unmounting of the entire React component tree.
+    - Ensure the stack trace print to the console is disabled in production.
+
+## Axios instead of Fetch
+
+- 113
+  - Not all browsers, especially older browsers, support the native fetch API.
+  - Testing in a headless browser environment can lead to issues when using the native fetch API.
+  - A couple ways to make this work:
+    - Older browsers: polyfills
+    - Testing: [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch)
+    - `npm install axios`
+    - `import axios from 'axios';`
+    - Can use `axios()` instead of `fetch()`
+      - Takes a URL as an argument, returns a promise.
+      - Don't have to transform the returned URL to JSON, since axios wraps the result into a `data` object in JavaScript.
+- 114
+  - `axios()` uses HTTP GET by default
+    - Explicit: `axios.get()`
+    - POST: `axios.post()`
+    - axios is a powerful library to perform requests to remote APIs.
+    - **Recommendation**: Use `axios` instead of the native fetch API when requests become complex or you have to deal with promises.
+  - [Prevent React setState on unmounted Component](https://www.robinwieruch.de/react-warning-cant-call-setstate-on-an-unmounted-component/)
+    - Warnings usually show up when `this.setState()` is called on a component, even though the component was already unmounted (e.g., a component is not rendered due to conditional rendering, or the user navigated away from a component).
+    - Handle this issue by either
+      - Aborting the request when the component unmounts
+        - But most promise-based libraries & APIs don't implement aborting a request
+      - Prevening `this.setState()` on an unmounted component
+    - Workaround
+      - Introduce a class field (on the component instance, not local state management) that holds the lifecycle state of your component to prevent `this.setState()` from being called: `_isMounted`
+        - Initialize it to false.
+        - Change it to true when the component is mounted.
+        - Set it to false when the component is unmounted.
+      - In asynchronous requests, check `if (this._isMounted)` before calling `this.setState()`.
+- Exercises
+  - [Why Frameworks matter](https://www.robinwieruch.de/why-frameworks-matter/)
