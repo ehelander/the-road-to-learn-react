@@ -791,3 +791,15 @@
   - [HN Search API](https://hn.algolia.com/api)
 
 ## Client Cache
+
+## Error Handling
+
+- Exercises
+  - [Error Handling in React 16](https://reactjs.org/blog/2017/07/26/error-handling-in-react-16.html)
+    - Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed.
+    - A class component becomes an error boundary if it defines a new `componentDidCatch(error, info)` lifecycle method.
+      - `componentDidCatch()` works like a Javascript `catch {}` block.
+      - Only class components can be error boundaries.
+      - Error boundaries only catch errors for the components _below_ them in the tree.
+    - As of React 16, errors that are not caught by any error boundary result in unmounting of the entire React component tree.
+    - Ensure the stack trace print to the console is disabled in production.
