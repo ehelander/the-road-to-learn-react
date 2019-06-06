@@ -837,3 +837,5 @@
       - In asynchronous requests, check `if (this._isMounted)` before calling `this.setState()`.
 - Exercises
   - [Why Frameworks matter](https://www.robinwieruch.de/why-frameworks-matter/)
+
+# Code Organization and Testing
