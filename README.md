@@ -777,3 +777,15 @@
     - `SyntheticEvent` is pooled for performance: the object is reused and all properties are nullified after the event callback has been invoked (i.e., you cannot access the event asynchronously).
       - Though note that calling `event.persist()` will remove the synthetic event from the pool and allow references to the event to be retained by user code.
   - [HN Search API](https://hn.algolia.com/api)
+
+## Paginated Fetch
+
+- 100
+  - Since `render()` is called before the data is fetched asynchronously, be sure to set a default value.
+- Exercises
+  - [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)
+    - Default JavaScript function parameter value: `undefined`
+    - Providing a default argument value will only set the value if it is `undefined` (including if `undefined` is passed); other falsy values will be passed.
+    - The default argument is evaluated at call time, so a new object would be created each time the function is called.
+    - Default parameters are available to later default parameters.
+  - [HN Search API](https://hn.algolia.com/api)
