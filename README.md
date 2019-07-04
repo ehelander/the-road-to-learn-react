@@ -543,7 +543,7 @@
       - Can call `setState()` immediately; but it will trigger an extra rendering.
         - Because it happens before the browser updates the screen, the user won't see the intermediate state.
         - Hurts performance. You should ususally be able to set the initial state in the `constructor()`. But this can be useful when working with modals and tooltips that need to measure a DOM node before rendering something that depends on its size or position.
-    - `componentDidUpdate(prevProps, prevState, snapsho)`
+    - `componentDidUpdate(prevProps, prevState, snapshot)`
       - Useful for an opportunity to operate on the DOM where the component has been updated.
       - Good place for network requests (as long as you compare current vs. previous props, since they may have not changed and a network request may be unnecessary).
       - Can call `setState()` immediately, but it must be wrapped in a condition to compare props - otherwise, an infinite loop will result.
@@ -839,3 +839,66 @@
   - [Why Frameworks matter](https://www.robinwieruch.de/why-frameworks-matter/)
 
 # Code Organization and Testing
+
+## ES6 Modules: Import and Export
+
+- 118
+  - Modules can be single files or entire folders with one `index` file as the entry point.
+  - Import and export statements facilitate code splitting and encapsulation (i.e., file exports are basically a public API to a file).
+  - Act of exporting one or more variables: named export.
+  - Can also import all exported variables via `import * as alias from './file.js';`
+- 119
+  - `default` use cases:
+    - Export/import a single functionality
+    - Highlight the main functionality of the exposed API of a module
+    - Have a fallback import functionality
+  - Note that curly braces must be left out to import a default export.
+- 120
+  - Can combine `default` and declaration statements: `export const`...
+- Exercises
+
+  - [ES6 import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
+    - Imported modules are in [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode) whether they are declared as such or not.
+    - The `import` statement _cannot_ be used in embedded scripts unless the script has a `type="module"`.
+    - Dynamic import is useful for loading a module conditionally or on demand; the static form is preferable for loading initial dependencies and benefits more from static analysis tools and tree shaking.
+      - The `import` keyword can be called as a function to dynamically import a module. It returns a promise.
+        ```
+        import('/modules/my-module.js')
+          .then((module) => {
+            // Do something with the module
+          });
+        ```
+      - It also supports the `await` keyword.
+        - `let module = await import('/modules/my-module.js');`
+    - Can import a module for its side effect only (running the module's global code but not actually importing any values)
+      - `import '/modules/my-module.js';`
+  - [ES6 export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)
+
+    - Exported modules are in `strict mode` whether declared as such or not. The export statement cannot be used in embedded scripts.
+    - Can export features declared earlier, or can declare them while exporting:
+
+      - Named
+
+        ```
+        // export features declared earlier
+        export { myFunction, myVariable };
+
+        // export individual features (can export var, let,
+        // const, function, class)
+        export let myVariable = Math.sqrt(2);
+        export myFunction() { ... };
+        ```
+
+      - Default
+
+        ```
+        // export feature declared earlier as default
+        export { myFunction as default };
+
+        // export individual features as default
+        export default myFunction() { ... }
+        export default class { .. }
+        ```
+
+    - A default export can be imported with any name.
+    - JS modules cannot be run via a `file://` URL (due to CORS errors); they must be run via an HTTP server.
