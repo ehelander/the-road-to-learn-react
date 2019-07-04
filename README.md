@@ -902,3 +902,13 @@
 
     - A default export can be imported with any name.
     - JS modules cannot be run via a `file://` URL (due to CORS errors); they must be run via an HTTP server.
+
+## Code Organization with ES6 Modules
+
+- 121
+  - Common naming convention: Separate files into folders and include an `index.js` file in the folder to server as an entry point.
+  - Folders can contain the component declarations, styling, and tests.
+- 122
+  - Also common: Separate constants into a `constants` folder.
+  - When importing `index.js`, no file name is needed (e.g., `import { foo } from './constants'`)
+  - This convention comes from Node.js, where the external modules are only allowed to use `index.js`.
