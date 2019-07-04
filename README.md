@@ -912,3 +912,19 @@
   - Also common: Separate constants into a `constants` folder.
   - When importing `index.js`, no file name is needed (e.g., `import { foo } from './constants'`)
   - This convention comes from Node.js, where the external modules are only allowed to use `index.js`.
+
+## Snapshot Tests with Jest
+
+- 126
+  - Testing pyramid
+    - Many end-to-end tests
+    - Several integration tests
+    - A few unit tests
+  - `create-react-app` ships with Jest.
+- 127
+  - `it` block defines a test case.
+    - Though Jest often uses an alias `test` function.
+  - `describe` block defines a test suite.
+- 128
+  - Must install Jest's utility library
+    - `npm install --save-dev react-test-renderer`
