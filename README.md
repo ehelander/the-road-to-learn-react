@@ -928,3 +928,18 @@
 - 128
   - Must install Jest's utility library
     - `npm install --save-dev react-test-renderer`
+- 129
+  - `renderer.create()` creates a snapshot of a component, storing the DOM into a snapshot. When the tests are run in the future, it expects the test to match the previous snapshot.
+- 130
+  - If a component encounters an error during the rendering process, it will fail - even if there is no explicit assertion.
+- 131
+  - Snapshot tests usually stay pretty basic: you just want to make sure (or see if) a component changes its output.
+- Exercises
+  - [Jest in React](https://jestjs.io/docs/en/tutorial-react)
+    - When a snapshot test fails, you need to evaluate whether it is an intended or unintended change.
+    - If you get errors when mocking a module in React 16+ (e.g., `Warning: <SomeComponent /> is using uppercase HTML. Always use lowercase HTML tags in React.` or `Warning: The tag <SomeComponent> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter.`), see the options listed on this page.
+      - Render as text.
+      - Render as a custom element.
+      - Use `react-test-renderer`.
+      - Disable warnings (as a last resort).
+    - To assert, and manipulate rendered components, can use [react-testing-library](https://github.com/kentcdodds/react-testing-library), [Enzyme](http://airbnb.io/enzyme/), or React's [TestUtils](http://facebook.github.io/react/docs/test-utils.html).
